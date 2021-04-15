@@ -44,27 +44,11 @@ questions:
   type: boolean
   label: Expose app using Layer 7 Load Balancer
 
-# - variable: mobile.app.button.hexcolour
-#   default: "#cf3734"
-#   description: "Enter the button Hex color Eg. #fff"
-#   type: string
-#   label: MOBILE BUTTON HEX COLOR
-#   group: "Mobile Details"
-#   required: true
-# - variable: mobile.app.actionbar.hexcolour
-#   default: "#cf3734"
-#   description: "Enter the Action Bar Hex color Eg. #fff"
-#   type: string
-#   label: MOBILE ACTION BAR HEX COLOR
-#   group: "Mobile Details"
-#   required: true
-# - variable: mobile.app.imageurl
-#   default: "https://s3-ap-southeast-2.amazonaws.com/pgva/images/valuead/logo.jpg"
-#   description: "Paste a public accessible mobiel URL , preferrable behind a CDN."
-#   type: string
-#   label: MOBILE IMAGE URL
-#   group: "Mobile Details"
-#   required: false
+- variable: ingress.enabled
+  default: "true"
+  description: "Expose app using Layer 7 Load Balancer - ingress"
+  type: boolean
+  label: Expose app using Layer 7 Load Balancer
 
 
   default: "false"
