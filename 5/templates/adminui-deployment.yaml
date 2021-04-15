@@ -30,18 +30,6 @@ spec:
       - name: adminui20
         image: "{{ .Values.adminui20.image.repository }}:{{ .Values.adminui20.image.tag }}"
         imagePullPolicy: IfNotPresent
-        resources:
-          limits:
-{{- if eq $.Values.db.backup.account "PROD" }}
-            cpu: 300m
-            memory: "200Mi"
-{{- else }}
-            cpu: 50m
-            memory: "150Mi"
-{{- end }}
-          requests:
-            cpu: 50m
-            memory: "150Mi"
         ports:
         - containerPort: 80
         resources: {}

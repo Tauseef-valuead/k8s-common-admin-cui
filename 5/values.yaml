@@ -5,6 +5,27 @@ volumes:
     volumeHandle: fs-2ff7d46e
     efsVolumePath: efs
     wordpressUploadsPath: /var/www/html/wp-content/uploads
+lms:
+  image:
+    repository: api.ecr.ap-southeast-1.amazonaws.com/valuead/lms
+    tag: 7.27.0-ABE_137-RC2-b237
+  localization: en_US
+  prod:
+    resources:
+      limits:
+        memory: "2000Mi"
+        cpu: "500m"
+      requests:
+        memory: "1000Mi"
+        cpu: "100m"
+  uat:
+    resources:
+      limits:
+        memory: "1000Mi"
+        cpu: "500m"
+      requests:
+        memory: "1000Mi"
+        cpu: "100m"
 cui:
   image:
     repository: api.ecr.ap-southeast-1.amazonaws.com/valuead/cui
@@ -14,6 +35,22 @@ adminui20:
   image:
     repository: 744687221383.dkr.ecr.ap-southeast-1.amazonaws.com/k8s-admin20-ui
     tag: 1.0.0-RC1-b11
+  prod:
+    resources:
+      limits:
+        memory: "200Mi"
+        cpu: "300m"
+      requests:
+        memory: "150Mi"
+        cpu: "50m"
+  uat:
+    resources:
+      limits:
+        memory: "150Mi"
+        cpu: "50m"
+      requests:
+        memory: "150Mi"
+        cpu: "50m"
 
 ingress:
   ## Set to true to enable ingress record generation
