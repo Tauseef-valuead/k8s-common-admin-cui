@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{.Release.Name}}-cui"
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.15.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: cui
+    app.kubernetes.io/name: cui
+    app.kubernetes.io/instance: "{{.Release.Name}}-cui"
+    app.kubernetes.io/version: "{{ .Values.cui.image.tag }}"
+    app.kubernetes.io/tier: frontend
+    app.kubernetes.io/part-of: valuead
+    app.kubernetes.io/managed-by: git
+spec:
+  selector:
+    app: "{{.Release.Name}}-cui"
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    targetPort: 8080

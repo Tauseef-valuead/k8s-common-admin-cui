@@ -1,0 +1,88 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{.Release.Name}}-{{ $.Values.ingress.environment }}-cui"
+spec:
+{{- if eq $.Values.ingress.environment "prod" }}
+  replicas: 3
+{{- else }}
+  replicas: 1
+{{- end }}
+  minReadySeconds: 35
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+        maxUnavailable: 1
+        maxSurge: 30%
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        chart: {{ .Chart.Name }}
+        app: "{{.Release.Name}}-cui"
+        app.kubernetes.io/name: cui
+        app.kubernetes.io/instance: "{{.Release.Name}}-cui"
+        app.kubernetes.io/tier: frontend
+        app.kubernetes.io/part-of: valuead
+        app.kubernetes.io/managed-by: git
+    spec:
+      imagePullSecrets:
+        - name: vak8s
+      containers:
+      - name: cui
+        image: "{{ .Values.cui.image.repository }}:{{ .Values.cui.image.tag }}"
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+{{- if eq $.Values.ingress.environment "prod" }}
+            cpu: 300m
+            memory: "200Mi"
+{{- else }}
+            cpu: 50m
+            memory: "150Mi"
+{{- end }}
+          requests:
+            cpu: 50m
+            memory: "150Mi"
+        env:
+        - name: LMS_PROXY_URL_BASE
+          value: http://localhost:8080
+        - name: ENVIRONMENT
+          value: {{ $.Values.ingress.environment }}
+        - name: CATALINA_OPTS
+          value: "-XX:+UseG1GC -Xmx64m -Xms32m"
+        ports:
+        - containerPort: 8080
+        resources: {}
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 20
+      restartPolicy: Always
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: nodegroup
+                operator: In
+                values:
+                - vastack
+{{- if eq $.Values.ingress.environment "prod" }}
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                    - "{{.Release.Name}}-cui"
+              topologyKey: "kubernetes.io/hostname"
+{{- end }}
+status: {}

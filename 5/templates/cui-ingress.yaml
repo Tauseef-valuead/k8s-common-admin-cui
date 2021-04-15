@@ -1,0 +1,52 @@
+{{- if .Values.ingress.enabled }}
+{{- range .Values.ingress.hosts }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: "{{ $.Release.Name }}-cui-ingress"
+  labels:
+    app: "{{ $.Release.Name }}-cui-ingress"
+  annotations:
+    {{- if .tls }}
+    ingress.kubernetes.io/secure-backends: "true"
+    {{- end }}
+    {{- range $key, $value := .annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    kubernetes.io/ingress.class: "nginx"
+    #nginx.ingress.kubernetes.io/rewrite-target: /ui
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "route-cui"
+    nginx.ingress.kubernetes.io/session-cookie-hash: "sha1"
+    nginx.ingress.kubernetes.io/base-url-scheme: "https"
+spec:
+  rules:
+{{- if eq $.Values.ingress.environment "prod" }}
+  # USE PRODUCTION DOMAIN
+  - host: "{{ $.Release.Name }}.{{ $.Values.ingress.rootDomain }}"
+    http:
+      paths:
+        - path: /ui/
+          backend:
+            serviceName: "{{ $.Release.Name }}-cui"
+            servicePort: 8080
+  - host: "{{ $.Release.Name }}.{{ $.Values.ingress.environment }}.{{ $.Values.ingress.rootDomain }}"
+{{- else }}
+  # USE TEST DOMAIN FOR TEST, UDAT, DEV, ETC
+  - host: "{{ $.Release.Name }}-{{ $.Values.ingress.environment }}.test.{{ $.Values.ingress.rootDomain }}"
+{{- end }}
+    http:
+      paths:
+        - path: /ui/
+          backend:
+            serviceName: "{{ $.Release.Name }}-cui"
+            servicePort: 8080
+{{- if .tls }}
+  tls:
+  - hosts:
+    - {{ .name }}
+    secretName: {{ .tlsSecret }}
+{{- end }}
+---
+{{- end }}
+{{- end }}

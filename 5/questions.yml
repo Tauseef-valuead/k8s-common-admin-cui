@@ -1,0 +1,769 @@
+questions:
+- variable: ingress.environment
+  default: "uat"
+  description: "Environment (TEST, UAT or PROD)"
+  type: enum
+  options:
+    - "test"
+    - "uat"
+    - "prod"
+  required: true
+  label: Environment
+  group: "Environment Definition"
+- variable: lms.localization
+  default: "en_US"
+  description: "Value-Ad API localization"
+  type: string
+  label: Value-Ad API localization
+  group: "Environment Definition"
+  required: true
+- variable: lms.image.repository
+  default: "valuead/k8s-lms"
+  description: "Value-Ad LMS image name"
+  type: string
+  label: Value-Ad Image Name
+  group: "APPLICATION VERSION"
+  required: true
+- variable: lms.image.tag
+  default: "7.31.4-b312"
+  description: "Value-Ad LMS Image Version"
+  type: string
+  label: Value-Ad Image Version
+  group: "APPLICATION VERSION"
+  required: true
+# Superset
+- variable: superset.image.repository
+  default: "amancevice/superset"
+  description: "Superset Image Name"
+  type: string
+  label: Superset Image Name
+  group: "SUPERSET REPORTING"
+  required: true
+- variable: superset.image.tag
+  default: "0.38.0"
+  type: string
+  description: "Superset Image Version"
+  label: Superset Image Version
+  group: "SUPERSET REPORTING"
+  required: true
+- variable: supersetDeployInit.image.repository
+  default: "744687221383.dkr.ecr.ap-southeast-1.amazonaws.com/valuead/k8s-superset-deploy-init"
+  type: string
+  label: Superset Deploy Init Image Name
+  description: "Superset Deploy Init Image Name"
+  required: true
+  group: "SUPERSET REPORTING"
+- variable: supersetDeployInit.image.tag
+  default: "2.0.0-b37"
+  type: string
+  label: Superset Deploy Init Image Version
+  description: "Superset Deploy Init Image Version"
+  required: true
+  group: "SUPERSET REPORTING"
+# KAFKA
+- variable: kafkadeploy.image.repository
+  default: "744687221383.dkr.ecr.ap-southeast-1.amazonaws.com/valuead/k8s-kafka-pipelines"
+  description: "Value-Ad Kafka pipeline job Image Name"
+  type: string
+  label: Kafka pipeline job Image Name
+  group: "KAFKA PIPELINE JOB"
+  required: true
+- variable: kafkadeploy.image.tag
+  default: "2.0.0-rc11-b130"
+  type: string
+  description: "Value-Ad Kafka pipeline job Image Version"
+  label: Kafka pipeline job Image Version
+  group: "KAFKA PIPELINE JOB"
+  required: true
+- variable: kafkadeploy.liquibase.repository
+  default: "744687221383.dkr.ecr.ap-southeast-1.amazonaws.com/valuead/k8s-dw-kafka-liquibase-init"
+  type: string
+  label: Kafka pipeline Liquibase Image Name
+  description: "Value-Ad Kafka pipeline Liquibase Image Name"
+  required: true
+  group: "KAFKA PIPELINE JOB"
+- variable: kafkadeploy.liquibase.tag
+  default: "2.0.0-rc11-b130"
+  type: string
+  label: Kafka pipeline Liquibase Image Version
+  description: "Value-Ad Kafka pipeline Liquibase Image Version"
+  required: true
+  group: "KAFKA PIPELINE JOB"
+- variable: kafkadeploy.job.task
+  default: "install"
+  type: string
+  label: Kafka pipeline job task
+  description: "Value-Ad Kafka pipeline job task"
+  group: "KAFKA PIPELINE JOB"
+- variable: kafkadeploy.kafka.pipeline_tag
+  default: "2.0.0"
+  type: string
+  label: Kafka pipeline version
+  description: "Value-Ad Kafka pipeline version"
+  group: "KAFKA PIPELINE JOB"
+- variable: cui.image.repository
+  default: "valuead/k8s-cui"
+  description: "Value-Ad image name"
+  type: string
+  label: Value-Ad Image Name
+  group: "APPLICATION VERSION"
+  required: true
+- variable: cui.image.tag
+  default: "3.2.0-b20"
+  description: "Value-Ad CUI LMS Image Version"
+  type: string
+  label: Value-Ad Image Version
+  group: "APPLICATION VERSION"
+  required: true
+- variable: adminui20.image.repository
+  default: "744687221383.dkr.ecr.ap-southeast-1.amazonaws.com/k8s-admin20-ui"
+  description: "Value-Ad Admin-UI image name"
+  type: string
+  label: Value-Ad Admin-UI Image Name
+  group: "APPLICATION VERSION"
+  required: true
+- variable: adminui20.image.tag
+  default: "1.1.3-b64"
+  description: "Value-Ad Admin-UI Image Version"
+  type: string
+  label: Value-Ad Admin-UI Image Version
+  group: "APPLICATION VERSION"
+  required: true
+- variable: postdeploy.image.repository
+  default: "valuead/k8s-postdeploy"
+  description: "Value-Ad POSTDEPLOY name"
+  type: string
+  label: Value-Ad Image Name
+  group: "APPLICATION VERSION"
+  required: true
+- variable: postdeploy.image.tag
+  default: "2.3-RC1-b42"
+  description: "Value-Ad POSTDEPLOY Image Version"
+  type: string
+  label: Value-Ad Image Version
+  group: "APPLICATION VERSION"
+  required: true
+- variable: lms.resource
+  default: "false"
+  description: "Enable LMS Resource limits"
+  type: boolean
+  label: Enable LMS Resource limits?
+  show_subquestion_if: true
+  group: "APPLICATION VERSION"
+  subquestions:
+  # RESOURCES LIMITS - LMS
+  - variable: lms.dummy
+    default: ""
+    description: "dummy field"
+    type: string
+    label: Dummy field
+    group: "APPLICATION VERSION"
+    required: false
+  - variable: lms.uat.resources.limits.cpu
+    default: "500m"
+    description: "Value-Ad LMS cpu limit"
+    type: string
+    label: LMS CPU Limit
+    show_if: "db.backup.account=UAT/TEST"
+    group: "APPLICATION VERSION"
+    required: true
+  - variable: lms.prod.resources.limits.cpu
+    default: "500m"
+    description: "Value-Ad LMS cpu limit"
+    type: string
+    label: LMS CPU Limit
+    show_if: "db.backup.account=PROD"
+    group: "APPLICATION VERSION"
+    required: true
+  - variable: lms.uat.resources.limits.memory
+    default: "1000Mi"
+    description: "Value-Ad LMS memory requests"
+    type: string
+    show_if: "db.backup.account=UAT/TEST"
+    label: LMS Memory Limits
+    group: "APPLICATION VERSION"
+    required: true
+  - variable: lms.prod.resources.limits.memory
+    default: "2000Mi"
+    description: "Value-Ad LMS memory Limits"
+    type: string
+    show_if: "db.backup.account=PROD"
+    label: LMS Memory Limits
+    group: "APPLICATION VERSION"
+    required: true
+
+  #RESOURCES REQUESTS
+  - variable: lms.uat.resources.requests.cpu
+    default: "100m"
+    description: "Value-Ad LMS cpu requests"
+    type: string
+    label: LMS CPU Request
+    group: "APPLICATION VERSION"
+    required: true
+  - variable: lms.uat.resources.requests.memory
+    default: "1000Mi"
+    description: "Value-Ad LMS memory requests"
+    type: string
+    label: LMS Memory Request
+    group: "APPLICATION VERSION"
+    required: true
+# - variable: db.server
+#   default: "va-k8sdb-test.ci1ejznmb8tk.ap-southeast-1.rds.amazonaws.com"
+#   description: "Value-Ad DB Servers"
+#   type: enum
+#   options:
+#     - "va-k8sdb-prod-cluster-1.cluster-cvkiwalfscrz.ap-southeast-1.rds.amazonaws.com"
+#     - "va-postgres1-test.c2ngubujml16.ap-southeast-1.rds.amazonaws.com"
+#   label: Value-Ad DB Servers
+#   group: "LMS DB Environment Definition"
+#   required: true
+# - variable: db.clientpass
+#   default: "value123"
+#   description: "DB Server Client Pass. We will use the client name + environment as the username"
+#   type: string
+#   label: DB Server Client Pass
+#   group: "LMS DB Environment Definition"
+#   required: true
+# RESOURCES LIMITS
+- variable: db.backup.restore
+  default: "true"
+  description: "Deploy using latest production backup, applies only for UAT and TEST"
+  type: boolean
+  label: Deploy using latest production backup?
+  show_subquestion_if: true
+  group: "LMS DB Environment Definition"
+  subquestions:
+  - variable: db.backup.account
+    default: "UAT/TEST"
+    description: "Backup account"
+    type: enum
+    options:
+      - "UAT/TEST"
+      - "PROD"
+  - variable: db.backup.lms
+    default: "s3://va-integration-backup/rds/2019-05-23/rds_va-k8sdb-test.ci1ejznmb8tk.ap-southeast-1.rds.amazonaws.com_zurichmy_uat_lms_2019-05-23-07-56-28.tar.gz"
+    description: "LMS DB Backup Path"
+    type: string
+    label: LMS DB Backup Path
+    group: "Backup Restore"
+    required: false
+  - variable: db.backup.vad
+    default: "s3://va-integration-backup/rds/2019-05-23/rds_va-k8sdb-test.ci1ejznmb8tk.ap-southeast-1.rds.amazonaws.com_zurichmy_uat_vad_2019-05-23-07-56-31.tar.gz"
+    description: "VAD DB Backup Path"
+    type: string
+    label: VAD DB Backup Path
+    group: "Backup Restore"
+    required: false
+  - variable: db.backup.lmsowner1
+    default: "zurichmy_uat"
+    description: "Original LMS DB_CLIENT_USERNAME where backup were generated"
+    type: string
+    label: LMS Owner 1
+    group: "Backup Restore"
+    required: false
+  - variable: db.backup.lmsowner2
+    default: "vatest"
+    description: "Original LMS DB_ROOT_USERNAME where backup were generated"
+    type: string
+    label: LMS Owner 2
+    group: "Backup Restore"
+    required: false
+  - variable: db.backup.vadowner1
+    default: "zurichmy_uat"
+    description: "Original VAD DB_CLIENT_USERNAME where backup were generated, usually same as LMS"
+    type: string
+    label: VAD Owner 1
+    group: "Backup Restore"
+    required: false
+  - variable: db.backup.vadowner2
+    default: "vatest"
+    description: "Original VAD DB_ROOT_USERNAME where backup were generated, usually same as LMS"
+    type: string
+    label: VAD Owner 2
+    group: "Backup Restore"
+    required: false
+- variable: db.resource
+  default: "false"
+  description: "Enable LMS DB Resource limits"
+  type: boolean
+  label: Enable LMS DB Resource limits?
+  show_subquestion_if: true
+  group: "LMS DB Environment Definition"
+  subquestions:
+  #RESOURCE LIMT - LMS DB
+  - variable: lms.db.dummy
+    default: ""
+    description: "dummy field"
+    type: string
+    label: Dummy field
+    group: "LMS DB Environment Definition"
+    required: false
+  - variable: db.resources.limits.cpu
+    default: "1"
+    description: "Value-Ad DB Servers"
+    type: string
+    label: LMS DB CPU Limit
+    group: "LMS DB Environment Definition"
+    required: true
+  - variable: db.resources.limits.memory
+    default: "500Mi"
+    description: "Value-Ad DB Servers"
+    type: string
+    label: LMS DB Memory Limit
+    group: "LMS DB Environment Definition"
+    required: true
+  # RESOURCES REQUESTS
+  - variable: db.resources.requests.cpu
+    default: "100m"
+    description: "Value-Ad DB Servers"
+    type: string
+    label: LMS DB CPU Request
+    group: "LMS DB Environment Definition"
+    required: true
+  - variable: db.resources.requests.memory
+    default: "100Mi"
+    description: "Value-Ad DB Servers"
+    type: string
+    label: LMS DB Memory Request
+    group: "LMS DB Environment Definition"
+    required: true
+- variable: etl.enabled
+  default: "false"
+  description: "Enable ETL Jobs"
+  type: boolean
+  label: Enable ETL deploy?
+  show_subquestion_if: true
+  group: "ETL Deployment"
+  subquestions:
+  - variable: etl.jobsid
+    default: "valuead_main"
+    description: "eg: valuead_main|as400_main|project100_main"
+    type: string
+    label: ETL Jobs Id
+    group: "ETL Deployment"
+    required: true
+  - variable: etl.image.repository
+    default: "valuead/k8s-etl"
+    description: "Value-Ad ETL image name"
+    type: string
+    label: Value-Ad ETL Image Name
+    group: "ETL Deployment"
+    required: true
+  - variable: etl.image.tag
+    default: "3.0-RC1-b125"
+    description: "Value-Ad ETL Image Version, eg: 1.0-RC1-10"
+    type: string
+    label: Value-Ad ETL Image Version
+    group: "ETL Deployment"
+    required: true
+- variable: pentaho.enabled
+  default: "false"
+  description: "Enable Pentaho deploy"
+  type: boolean
+  label: Enable Pentaho deploy?
+  show_subquestion_if: true
+  group: "Pentaho Deployment"
+  subquestions:
+  - variable: pentaho.dummy
+    default: ""
+    description: "dummy field"
+    type: string
+    label: Dummy field
+    group: "Pentaho Deployment"
+    required: false
+  - variable: pentaho.image.repository
+    default: "valuead/k8s-pentaho"
+    description: "Value-Ad PENTAHO image name"
+    type: string
+    label: Value-Ad PENTAHO Image Name
+    group: "Pentaho Deployment"
+    required: true
+  - variable: pentaho.image.tag
+    default: "3.0-RC1-b172"
+    description: "Value-Ad PENTAHO Image Version"
+    type: string
+    label: Value-Ad PENTAHO Image Version
+    group: "Pentaho Deployment"
+    required: true
+  - variable: pentaho.customization.image.repository
+    default: "valuead/k8s-phcustomization"
+    description: "Value-Ad PENTAHO CUSTOMIZATION image name"
+    type: string
+    label: Value-Ad PENTAHO CUSTOMIZATION Image Name
+    group: "Pentaho Deployment"
+    required: true
+  - variable: pentaho.customization.image.tag
+    default: "3.0-RC1-b83"
+    description: "Value-Ad PENTAHO CUSTOMIZATION Image Version"
+    type: string
+    label: Value-Ad PENTAHO CUSTOMIZATION Image Version
+    group: "Pentaho Deployment"
+    required: true
+  - variable: pentaho.customization.serverusername
+    default: "pentaho"
+    description: "Pentaho Customization Server Username"
+    type: string
+    label: Pentaho Customization Server Username
+    group: "Pentaho Deployment"
+    required: true
+  - variable: pentaho.customization.serverpassword
+    default: "Pnie8Hek8s"
+    description: "Pentaho Customization Server Password"
+    type: string
+    label: Pentaho Customization Server Password
+    group: "Pentaho Deployment"
+    required: true
+- variable: pentaho.resource
+  default: "false"
+  description: "Enable Pentaho Resource limits"
+  type: boolean
+  label: Enable Pentaho Resource limits?
+  show_subquestion_if: true
+  group: "Pentaho Deployment"
+  subquestions:
+  # RESOURCES LIMITS - PH
+  - variable: ph.dummy
+    default: ""
+    description: "dummy field"
+    type: string
+    label: Dummy field
+    group: "Pentaho Deployment"
+  - variable: pentaho.resources.limits.cpu
+    default: "2"
+    description: "Value-Ad PH cpu limit"
+    type: string
+    label: PH CPU Limit
+    group: "Pentaho Deployment"
+    required: true
+  - variable: pentaho.resources.limits.memory
+    default: "2500Mi"
+    description: "Value-Ad PH Memory limit"
+    type: string
+    label: PH Memory Limit
+    group: "Pentaho Deployment"
+    required: true
+  # RESOURCES REQUESTS
+  - variable: pentaho.resources.requests.cpu
+    default: "500m"
+    description: "Value-Ad PH cpu requests"
+    type: string
+    label: PH CPU Request
+    group: "Pentaho Deployment"
+    required: true
+  - variable: pentaho.resources.requests.memory
+    default: "2500Mi"
+    description: "Value-Ad PH memory requests"
+    type: string
+    label: PH Memory Request
+    group: "Pentaho Deployment"
+    required: true
+- variable: pentaho.customization.resource
+  default: "false"
+  description: "Enable Pentaho customization Resource limits"
+  type: boolean
+  label: Enable Pentaho customization Resource limits?
+  show_subquestion_if: true
+  group: "Pentaho Deployment"
+  subquestions:
+  # RESOURCES LIMITS - PH-Customization
+  - variable: ph.customization.dummy
+    default: ""
+    description: "dummy field"
+    type: string
+    label: Dummy field
+    group: "Pentaho Deployment"
+    required: false
+  - variable: pentaho.customization.resources.limits.cpu
+    default: "1000m"
+    description: "Value-Ad PH Customization cpu limit"
+    type: string
+    label: PH Customization CPU Limit
+    group: "Pentaho Deployment"
+    required: true
+  - variable: pentaho.customization.resources.limits.memory
+    default: "500Mi"
+    description: "Value-Ad PH Customization Memory limit"
+    type: string
+    label: PH Customization Memory Limit
+    group: "Pentaho Deployment"
+    required: true
+  # RESOURCES REQUESTS - PH-Customization
+  - variable: pentaho.customization.resources.requests.cpu
+    default: "600m"
+    description: "Value-Ad PH Customization cpu requests"
+    type: string
+    label: PH Customization CPU Request
+    group: "Pentaho Deployment"
+    required: true
+  - variable: pentaho.customization.resources.requests.memory
+    default: "300Mi"
+    description: "Value-Ad PH Customization memory requests"
+    type: string
+    label: PH Customization Memory Request
+    group: "Pentaho Deployment"
+    required: true
+- variable: db.ph.resource
+  default: "false"
+  description: "Enable Pentaho DB Resource limits"
+  type: boolean
+  label: Enable Pentaho DB Resource limits?
+  show_subquestion_if: true
+  group: "PENTAHO DB Environment Definition"
+  subquestions:
+  # RESOURCES LIMITS - Pentaho DB
+
+  - variable: db.ph.resources.dummy
+    default: ""
+    description: "dummy field"
+    type: string
+    label: Dummy field
+    group: "PENTAHO DB Environment Definition"
+  - variable: db.ph.resources.limits.cpu
+    default: "1"
+    description: "Value-Ad Pentaho DB cpu limit"
+    type: string
+    label: Pentaho DB cpu limit
+    group: "PENTAHO DB Environment Definition"
+    required: true
+  - variable: db.ph.resources.limits.memory
+    default: "500Mi"
+    description: "Value-Ad Pentaho DB Memory limit"
+    type: string
+    label: Pentaho DB Memory Limit
+    group: "PENTAHO DB Environment Definition"
+    required: true
+    # RESOURCES REQUESTS - Pentaho DB
+  - variable: db.ph.resources.requests.cpu
+    default: "100m"
+    description: "Value-Ad Pentaho DB cpu requests"
+    type: string
+    label: Pentaho DB CPU Request
+    group: "PENTAHO DB Environment Definition"
+    required: true
+  - variable: db.ph.resources.requests.memory
+    default: "100Mi"
+    description: "Value-Ad Pentaho DB memory requests"
+    type: string
+    label: Pentaho DB Memory Request
+    group: "PENTAHO DB Environment Definition"
+    required: true
+  # PENTAHO DETAILS
+  # - variable: db.ph.server
+  #   default: "va-k8sdb-ph-test.ci1ejznmb8tk.ap-southeast-1.rds.amazonaws.com"
+  #   description: "Value-Ad PENTAHO DB Servers"
+  #   type: enum
+  #   options:
+  #     - "va-k8sdb-ph-prod.cvkiwalfscrz.ap-southeast-1.rds.amazonaws.com"
+  #     - "va-k8sdb-ph-test.ci1ejznmb8tk.ap-southeast-1.rds.amazonaws.com"
+  #   label: Value-Ad PENTAHO DB Servers
+  #   group: "Pentaho Deployment"
+  #   required: true
+  # - variable: db.ph.clientpass
+  #   default: "value123"
+  #   description: "PENTAHO DB Server Client Pass. We will use the client name + environment as the username"
+  #   type: string
+  #   label: PENTAHO DB Server Client Pass
+  #   group: "Pentaho Deployment"
+  #   required: true
+
+
+
+
+  # DATAWAREHOUSE DETAILS
+- variable: db.dw.resource
+  default: "false"
+  description: "Enable DW DB Resource limits"
+  type: boolean
+  label: Enable PH DW DB Resource limits?
+  show_subquestion_if: true
+  group: "PENTAHO DB Environment Definition"
+  subquestions:
+    # RESOURCES LIMITS - DW DB
+    - variable: dw.db.dummy
+      default: ""
+      description: "dummy field"
+      type: string
+      label: Dummy field
+      group: "PENTAHO DB Environment Definition"
+      required: false
+    - variable: db.dw.resources.limits.cpu
+      default: "1"
+      description: "Value-Ad DW DB cpu limit"
+      type: string
+      label: DW DB cpu limit
+      group: "PENTAHO DB Environment Definition"
+      required: true
+    - variable: db.dw.resources.limits.memory
+      default: "500Mi"
+      description: "Value-Ad DW DB Memory limit"
+      type: string
+      label: DW DB Memory Limit
+      group: "PENTAHO DB Environment Definition"
+      required: true
+    # RESOURCES REQUESTS - DW DB
+    - variable: db.dw.resources.requests.cpu
+      default: "100m"
+      description: "Value-Ad DW DB cpu requests"
+      type: string
+      label: DW DB CPU Request
+      group: "PENTAHO DB Environment Definition"
+      required: true
+    - variable: db.dw.resources.requests.memory
+      default: "100Mi"
+      description: "Value-Ad DW DB memory requests"
+      type: string
+      label: DW DB Memory Request
+      group: "PENTAHO DB Environment Definition"
+      required: true
+  # - variable: db.dw.server
+  #   default: "va-k8sdb-dw-test.ci1ejznmb8tk.ap-southeast-1.rds.amazonaws.com"
+  #   description: "Value-Ad DW DB Servers"
+  #   type: enum
+  #   options:
+  #     - "va-k8sdb-dw-prod.cvkiwalfscrz.ap-southeast-1.rds.amazonaws.com"
+  #     - "va-k8sdb-dw-test.ci1ejznmb8tk.ap-southeast-1.rds.amazonaws.com"
+  #   label: Value-Ad DW DB Servers
+  #   group: "Pentaho Deployment"
+  #   required: true
+  # - variable: db.dw.clientpass
+  #   default: "value123"
+  #   description: "DW DB Server Client Pass. We will use the client name + environment as the username"
+  #   type: string
+  #   label: DW DB Server Client Pass
+  #   group: "Pentaho Deployment"
+  #   required: true
+- variable: pentaho.sso.enabled
+  default: "false"
+  description: "Pentaho SSO Enable?"
+  type: boolean
+  label: Pentaho SSO Enable?
+  group: "Pentaho SSO"
+  required: true
+  show_subquestion_if: true
+  subquestions:
+  - variable: pentaho.sso.redirecturl
+    default: ""
+    description: "Pentaho SSO Redirect URL, include FQDN URL e.g https://domain.com/?="
+    type: string
+    label: Pentaho SSO Redirect URL
+    group: "Pentaho Deployment"
+    required: true
+- variable: ingress.enabled
+  default: "true"
+  description: "Expose app using Layer 7 Load Balancer - ingress"
+  type: boolean
+  label: Expose app using Layer 7 Load Balancer
+- variable: sftp.pub_key
+  default: ""
+  description: "SFTP public key. Client name - environment will be used as the username. Eg. client1-prod"
+  type: string
+  label: SFTP Public Key
+  group: "SFTP Details"
+  required: true
+- variable: twilio.countrycode
+  default: ""
+  description: "TWILIO Country Code, please include + sign . Eg: +65"
+  type: string
+  label: TWILIO COUNTRY CODE
+  group: "TWILIO Details"
+  required: true
+- variable: twilio.id
+  default: "AC55ce08c98ed46bccf6aa115e31468985"
+  description: "TWILIO Account SID"
+  type: string
+  label: TWILIO ID
+  group: "TWILIO Details"
+  required: true
+- variable: twilio.token
+  default: "31465e356bb7cf42b96df263dd7d34b5"
+  description: "TWILIO Account Token"
+  type: string
+  label: TWILIO TOKEN
+  group: "TWILIO Details"
+  required: true
+- variable: twilio.authkey
+  default: "nxyuLU99IS5j72V9cyCyTYT9hMRUFX6t"
+  description: "TWILIO Authorization Key. An unique value should be set for each client."
+  type: string
+  label: TWILIO AUTH KEY
+  group: "TWILIO Details"
+  required: true
+- variable: twilio.isocountrycode
+  default: "KH"
+  description: "TWILIO ISO Country Code. Default is KH"
+  type: string
+  label: TWILIO ISO COUNTRY CODE
+  group: "TWILIO Details"
+  required: true
+# - variable: mobile.app.button.hexcolour
+#   default: "#cf3734"
+#   description: "Enter the button Hex color Eg. #fff"
+#   type: string
+#   label: MOBILE BUTTON HEX COLOR
+#   group: "Mobile Details"
+#   required: true
+# - variable: mobile.app.actionbar.hexcolour
+#   default: "#cf3734"
+#   description: "Enter the Action Bar Hex color Eg. #fff"
+#   type: string
+#   label: MOBILE ACTION BAR HEX COLOR
+#   group: "Mobile Details"
+#   required: true
+# - variable: mobile.app.imageurl
+#   default: "https://s3-ap-southeast-2.amazonaws.com/pgva/images/valuead/logo.jpg"
+#   description: "Paste a public accessible mobiel URL , preferrable behind a CDN."
+#   type: string
+#   label: MOBILE IMAGE URL
+#   group: "Mobile Details"
+#   required: false
+
+- variable: oauth.enabled
+  default: "false"
+  description: "Enable OAUTH"
+  type: boolean
+  label: Enable OAUTH deploy?
+  show_subquestion_if: true
+  group: "OAUTH Details"
+  subquestions:
+  - variable: oauth.auth_api_base_url
+    default: "https://apisam.uat.income.com.sg/UAT/"
+    descirption: "Enter auth api base url"
+    type: string
+    label: AUTH API BASE URL
+    group: "OAUTH Details"
+    required: true
+  - variable: oauth.auth_api_key
+    default: "e1hqEcWyGuanwI2BEqzy19BVCJjYHRZm2WVCUsLV"
+    description: "Enter auth api key"
+    type: string
+    label: AUTH API KEY
+    group: "OAUTH Details"
+    required: true
+  - variable: oauth.image.backend.repository
+    default: "valuead/k8s-ntuc-oauth-server-backend"
+    description: "Value-Ad OAUTH backend image name"
+    type: string
+    label: OAUTH backend Image Name
+    group: "OAUTH Details"
+    required: true
+  - variable: oauth.image.backend.tag
+    default: "1.0.6-ABE126-RC10-b31"
+    description: "Value-Ad OAUTH backend image tag"
+    type: string
+    label: OAUTH backend Image Tag
+    group: "OAUTH Details"
+    required: true
+  - variable: oauth.image.frontend.repository
+    default: "valuead/k8s-ntuc-oauth-server-frontend"
+    description: "Value-Ad OAUTH frontend image name"
+    type: string
+    label: OAUTH frontend Image Name
+    group: "OAUTH Details"
+    required: true
+  - variable: oauth.image.frontend.tag
+    default: "1.0.6-ABE126-RC10-b31"
+    description: "Value-Ad OAUTH frontend image tag"
+    type: string
+    label: OAUTH frontend Image Tag
+    group: "OAUTH Details"
+    required: true
