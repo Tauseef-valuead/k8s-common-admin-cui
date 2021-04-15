@@ -1,7 +1,7 @@
 apiVersion: v1
 name: valuead
-version: 5.2.0-rc8
-appVersion: 5.2.0-rc8
+version: 5.2.0-rc9
+appVersion: 5.2.0-rc9
 description: VALUE AD LEADS MANAGEMENT SYSTEM
 icon: https://www.value-ad.com/wp-content/uploads/2020/02/Value-Ad-Horizontal-Logo-copy-387x70.png
 keywords:
@@ -10,6 +10,6 @@ home: http://www.value-ad.com/
 sources:
 - https://github.com/digitalassembly/valuead
 maintainers:
-- name: carlos
-  email: carlos@assembly.cloud
+- name: tauseef
+  email: tauseef@value-ad.com
 engine: gotpl
